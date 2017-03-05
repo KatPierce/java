@@ -6,7 +6,6 @@ public class Main {
        Quaternion q1= new Quaternion(4,c1);
 
         System.out.println(q1.Spath());
-        System.out.println("klkm");
     }
 
 }
