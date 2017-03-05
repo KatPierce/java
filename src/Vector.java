@@ -6,6 +6,8 @@ public class Vector {
       this.d=d;
     }
 
+
+
     public double getB() {
         return b;
     }
