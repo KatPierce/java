@@ -21,16 +21,23 @@ public class Vector {
     }
 
 
-
     @Override
     public String toString() {
-        return  b+
-                "*i + "  + c+
-                "*j + " + d+
-                "*k"
-                ;
-    }
+        String s="";
 
+        s+=this.b+
+                "*i";
+
+        if (c>=0) s+='+';
+
+        s+=this.c+
+                "*j";
+        if (d>=0) s+='+';
+
+        s+=this.d+
+                "*k";
+        return  s;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
