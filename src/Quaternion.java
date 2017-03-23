@@ -12,13 +12,13 @@ public class Quaternion {
     }
 
     public Quaternion(Vector axis,double angle) {
-        this(Round(10,Math.cos(angle / 2)),
+        this(round(10,Math.cos(angle / 2)),
                 new Vector(axis.b *Math.sin(angle / 2),axis.c *Math.sin(angle / 2),axis.d *Math.sin(angle / 2)));
     }
 
 
     //Умножение на скаляр
-    public Quaternion MultiplicationonScal(double x) {
+    public Quaternion multiplyScal(double x) {
         double b1, c1, d1;
         b1=this.u.b*x;
         c1 = this.u.c * x;
@@ -31,13 +31,13 @@ public class Quaternion {
     }
 
     //Модуль
-    public double Modulus() {
+    public double modulus() {
         return Math.sqrt(this.a * this.a + this.u.b * this.u.b + this.u.c * this.u.c + this.u.d * this.u.d);
 
     }
 
     //Сопряжение
-    public Quaternion Conjugating() {
+    public Quaternion conjugating() {
         double b1, c1, d1;
         if (this.u.b == 0) b1 = this.u.b;
         else b1 = this.u.b * (-1);
@@ -51,7 +51,7 @@ public class Quaternion {
     }
 
     //Сложение
-    public Quaternion Addition(Quaternion q) {
+    public Quaternion add(Quaternion q) {
         double b1, c1, d1;
         b1 = this.u.b + q.u.b;
         c1 = this.u.c + q.u.c;
@@ -60,18 +60,18 @@ public class Quaternion {
     }
 
     //Разность
-    public Quaternion Subtraction(Quaternion q) {
+    public Quaternion subtract(Quaternion q) {
         double a1,b1, c1, d1;
-        a1=Round(1,this.a - q.a);
-        b1 = Round(1,this.u.b - q.u.b);
-        c1 = Round(1,this.u.c - q.u.c);
-        d1 = Round(1,this.u.d - q.u.d);
+        a1=round(1,this.a - q.a);
+        b1 = round(1,this.u.b - q.u.b);
+        c1 = round(1,this.u.c - q.u.c);
+        d1 = round(1,this.u.d - q.u.d);
 
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
     //Умножение на кватернион
-    public Quaternion Multiplication(Quaternion q) {
+    public Quaternion multiply(Quaternion q) {
         double a1, b1, c1, d1;
         a1 = this.a * q.a - this.u.b * q.u.b - this.u.c * q.u.c - this.u.d * q.u.d;
         b1 = this.a * q.u.b + this.u.b * q.a + this.u.c * q.u.d - this.u.d * q.u.c;
@@ -81,47 +81,47 @@ public class Quaternion {
     }
 
     //Нормирование
-    public Quaternion Normalazation() {
+    public Quaternion normalize() {
         double a1, b1, c1, d1;
-        if (this.Modulus()==0) throw new IllegalArgumentException("На ноль делить нельзя");
-        a1 = this.a / this.Modulus();
-        b1 = this.u.b / this.Modulus();
-        c1 = this.u.c / this.Modulus();
-        d1 = this.u.d / this.Modulus();
+        if (this.modulus()==0) throw new IllegalArgumentException("На ноль делить нельзя");
+        a1 = this.a / this.modulus();
+        b1 = this.u.b / this.modulus();
+        c1 = this.u.c / this.modulus();
+        d1 = this.u.d / this.modulus();
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
     //Обращение
-    public Quaternion Inversion() {
+    public Quaternion invert() {
         Quaternion q1, result;
         double mod;
-        q1 = this.Conjugating();
-        mod = this.Modulus() * this.Modulus();
+        q1 = this.conjugating();
+        mod = this.modulus() * this.modulus();
         if (mod==0) throw new IllegalArgumentException("Обратный кватернион существует только для ненулевого");
-        result = q1.MultiplicationonScal(1 / mod);
+        result = q1.multiplyScal(1 / mod);
         return result;
     }
 
     //Получение векторной величины
-    public Vector Vpart() {
+    public Vector vectorPart() {
         return this.u;
     }
 
     //Получение скалярной величины
-    public double Spart() {
+    public double scalPart() {
         return this.a;
     }
 
 
     //Возращает угол
-    public double Angl(){
+    public double angl(){
         double angle;
         angle= 2*Math.acos(this.a);
         return angle;
     }
 
     //Возвращает ось
-    public Vector Ax(double angle){
+    public Vector ax(double angle){
         if (angle%(2*Math.PI)==0) return this.u;
         double b1,c1,d1;
         Vector axis;
@@ -133,7 +133,7 @@ public class Quaternion {
     }
 
     //Округление
-    private static double Round(int q, double precise) {
+    private static double round(int q, double precise) {
         double b = Math.pow(10, q);
         double res = precise * b;
         int r = (int) res;
