@@ -11,40 +11,34 @@ public class Quaternion {
 
     }
 
-    public Quaternion(Vector axis,double angle) {
-        this(round(10,Math.cos(angle / 2)),
-                new Vector(axis.b *Math.sin(angle / 2),axis.c *Math.sin(angle / 2),axis.d *Math.sin(angle / 2)));
+    public static Quaternion fromAngleAndAxis(double angle, Vector axis){
+        return new Quaternion(round(10,Math.cos(angle / 2)),
+                new Vector(axis.getB() *Math.sin(angle / 2),axis.getC() *Math.sin(angle / 2),axis.getD() *Math.sin(angle / 2)));
     }
 
 
     //Умножение на скаляр
     public Quaternion multiplyScal(double x) {
         double b1, c1, d1;
-        b1=this.u.b*x;
-        c1 = this.u.c * x;
-        d1 = this.u.d * x;
-        if ((x == 0) && (this.u.b < 0)) b1 *= -1;
-        if ((x == 0) && (this.u.c < 0)) c1 *= -1;
-        if ((x == 0) && (this.u.d < 0)) d1 *= -1;
+        b1=this.u.getB()*x;
+        c1 = this.u.getC() * x;
+        d1 = this.u.getD() * x;
 
         return new Quaternion(this.a * x, new Vector(b1, c1, d1));
     }
 
     //Модуль
     public double modulus() {
-        return Math.sqrt(this.a * this.a + this.u.b * this.u.b + this.u.c * this.u.c + this.u.d * this.u.d);
+        return Math.sqrt(this.a * this.a + this.u.getB() * this.u.getB() + this.u.getC() * this.u.getC() + this.u.getD() * this.u.getD());
 
     }
 
     //Сопряжение
     public Quaternion conjugating() {
         double b1, c1, d1;
-        if (this.u.b == 0) b1 = this.u.b;
-        else b1 = this.u.b * (-1);
-        if (this.u.c == 0) c1 = this.u.c;
-        else c1 = this.u.c * (-1);
-        if (this.u.d == 0) d1 = this.u.d;
-         else d1 = this.u.d * (-1);
+        b1 = this.u.getB() * (-1);
+        c1 = this.u.getC() * (-1);
+        d1 = this.u.getD() * (-1);
         return new Quaternion(this.a, new Vector(b1, c1, d1));
 
 
@@ -53,30 +47,32 @@ public class Quaternion {
     //Сложение
     public Quaternion add(Quaternion q) {
         double b1, c1, d1;
-        b1 = this.u.b + q.u.b;
-        c1 = this.u.c + q.u.c;
-        d1 = this.u.d + q.u.d;
+        b1 = this.u.getB() + q.u.getB();
+        c1 = this.u.getC() + q.u.getC();
+        d1 = this.u.getD() + q.u.getD();
         return new Quaternion(this.a + q.a, new Vector(b1, c1, d1));
     }
 
     //Разность
     public Quaternion subtract(Quaternion q) {
         double a1,b1, c1, d1;
-        a1=round(1,this.a - q.a);
-        b1 = round(1,this.u.b - q.u.b);
-        c1 = round(1,this.u.c - q.u.c);
-        d1 = round(1,this.u.d - q.u.d);
-
+        a1=this.a - q.a;
+        b1 = this.u.getB() - q.u.getB();
+        c1 = this.u.getC() - q.u.getC();
+        d1 = this.u.getD() - q.u.getD();
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
+    public Quaternion approximatelyEquals(){
+        return new Quaternion(round(4,a),new Vector(round(4,u.getB()),round(4,u.getC()),round(4,u.getD())));
+    }
     //Умножение на кватернион
     public Quaternion multiply(Quaternion q) {
         double a1, b1, c1, d1;
-        a1 = this.a * q.a - this.u.b * q.u.b - this.u.c * q.u.c - this.u.d * q.u.d;
-        b1 = this.a * q.u.b + this.u.b * q.a + this.u.c * q.u.d - this.u.d * q.u.c;
-        c1 = this.a * q.u.c - this.u.b * q.u.d + this.u.c * q.a + this.u.d * q.u.b;
-        d1 = this.a * q.u.d + this.u.b * q.u.c - this.u.c * q.u.b + this.u.d * q.a;
+        a1 = this.a * q.a - this.u.getB() * q.u.getB() - this.u.getC() * q.u.getC() - this.u.getD() * q.u.getD();
+        b1 = this.a * q.u.getB() + this.u.getB() * q.a + this.u.getC() * q.u.getD() - this.u.getD() * q.u.getC();
+        c1 = this.a * q.u.getC() - this.u.getB() * q.u.getD() + this.u.getC() * q.a + this.u.getD() * q.u.getB();
+        d1 = this.a * q.u.getD() + this.u.getB() * q.u.getC() - this.u.getC() * q.u.getB() + this.u.getD() * q.a;
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
@@ -85,9 +81,9 @@ public class Quaternion {
         double a1, b1, c1, d1;
         if (this.modulus()==0) throw new IllegalArgumentException("На ноль делить нельзя");
         a1 = this.a / this.modulus();
-        b1 = this.u.b / this.modulus();
-        c1 = this.u.c / this.modulus();
-        d1 = this.u.d / this.modulus();
+        b1 = this.u.getB() / this.modulus();
+        c1 = this.u.getC() / this.modulus();
+        d1 = this.u.getD() / this.modulus();
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
@@ -125,9 +121,9 @@ public class Quaternion {
         if (angle%(2*Math.PI)==0) return this.u;
         double b1,c1,d1;
         Vector axis;
-        b1=this.u.b/Math.sin(angle/2);
-        c1=this.u.c/Math.sin(angle/2);
-        d1=this.u.d/Math.sin(angle/2);
+        b1=this.u.getB()/Math.sin(angle/2);
+        c1=this.u.getC()/Math.sin(angle/2);
+        d1=this.u.getD()/Math.sin(angle/2);
         axis= new Vector(b1,c1,d1);
         return axis;
     }
@@ -158,37 +154,30 @@ public class Quaternion {
         this.u = u;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Quaternion)) return false;
 
         Quaternion that = (Quaternion) o;
 
-        if (Double.compare(that.a, a) != 0) return false;
-        return u != null ? u.equals(that.u) : that.u == null;
+        if (Double.compare(that.getA(), getA()) != 0) return false;
+        return getU().equals(that.getU());
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(a);
+        temp = Double.doubleToLongBits(getA());
         result = (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (u != null ? u.hashCode() : 0);
+        result = 31 * result + getU().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        String s="q= "+String.format("%.1f",a);
-        if (u.b>=0) s+='+';
-        s+=u;
-        return s;
-
-
+        return "q= " + a +
+                u;
     }
-
 }

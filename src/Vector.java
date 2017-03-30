@@ -1,5 +1,5 @@
 public class Vector {
-    double b,c,d;
+    private double b,c,d;
     public Vector(double b, double c,double d) {
       this.b=b;
       this.c=c;
@@ -21,44 +21,39 @@ public class Vector {
     }
 
 
+
+public static String sign(double x){
+        if (x>0) return "+"+x; else
+    if (x==0) return "+"+(double)((int)x); else
+        return java.lang.Double.toString(x);
+}
+
     @Override
     public String toString() {
-        String s="";
-
-        s+=this.b+
-                "*i";
-
-        if (c>=0) s+='+';
-
-        s+=this.c+
-                "*j";
-        if (d>=0) s+='+';
-
-        s+=this.d+
-                "*k";
-        return  s;
+        return sign(b)+ "*i"+ sign(c)+"*j"+sign(d)+"*k";
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Vector)) return false;
 
         Vector vector = (Vector) o;
 
-        if (Double.compare(vector.b, b) != 0) return false;
-        if (Double.compare(vector.c, c) != 0) return false;
-        return Double.compare(vector.d, d) == 0;
+        if (Double.compare(vector.getB(), getB()) != 0) return false;
+        if (Double.compare(vector.getC(), getC()) != 0) return false;
+        return Double.compare(vector.getD(), getD()) == 0;
     }
 
     @Override
     public int hashCode() {
         int result;
         long temp;
-        temp = Double.doubleToLongBits(b);
+        temp = Double.doubleToLongBits(getB());
         result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(c);
+        temp = Double.doubleToLongBits(getC());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(d);
+        temp = Double.doubleToLongBits(getD());
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
