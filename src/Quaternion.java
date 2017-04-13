@@ -11,8 +11,9 @@ public class Quaternion {
 
     }
 
+
     public static Quaternion fromAngleAndAxis(double angle, Vector axis){
-        return new Quaternion(round(10,Math.cos(angle / 2)),
+        return new Quaternion(Math.cos(angle / 2),
                 new Vector(axis.getB() *Math.sin(angle / 2),axis.getC() *Math.sin(angle / 2),axis.getD() *Math.sin(angle / 2)));
     }
 
@@ -63,9 +64,7 @@ public class Quaternion {
         return new Quaternion(a1, new Vector(b1, c1, d1));
     }
 
-    public Quaternion approximatelyEquals(){
-        return new Quaternion(round(4,a),new Vector(round(4,u.getB()),round(4,u.getC()),round(4,u.getD())));
-    }
+
     //Умножение на кватернион
     public Quaternion multiply(Quaternion q) {
         double a1, b1, c1, d1;

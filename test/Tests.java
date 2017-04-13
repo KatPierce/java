@@ -1,13 +1,22 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+
+
 public class Tests {
+    private Quaternion q=new Quaternion(2.2, new Vector(0, 1, 0));
+    private Quaternion q1=new Quaternion(-0.1, new Vector(2.2, 0, 1));
+    private Quaternion q2=new Quaternion(2.1, new Vector(2.2, 1, 1));
+    private Quaternion q3= q2.subtract(q1);
+
 
 
     @Tag("Сложение кватернионов")
     @Test
     public void add() {
+
         Assertions.assertEquals(new Quaternion(4, new Vector(1, -7, 2)),
                 new Quaternion(2, new Vector(0, 1, 2)).add(new Quaternion(2, new Vector(1, -8, 0))));
         Assertions.assertEquals(new Quaternion(2, new Vector(-0.5, 2, 3)),
@@ -15,31 +24,34 @@ public class Tests {
 
     }
 
-    public void approximatelyEquals(Quaternion expected, Quaternion actual) {
-        Assertions.assertEquals(expected, new Quaternion(round(4, actual.getA()),
-                new Vector(round(4, actual.getU().getB()),
-                        round(4, actual.getU().getC()),
-                        round(4, actual.getU().getD()))));
-    }
 
-    //Округление
-    private static double round(int q, double precise) {
-        double b = Math.pow(10, q);
-        double res = precise * b;
-        int r = (int) res;
-        if (((precise * b * 10 % 10) >= 5) && (precise >= 0)) r++;
-        if ((Math.abs(precise * b * 10 % 10) >= 5) && (precise < 0)) r--;
-        return r / b;
-    }
 
+//    //Округление
+//    private static double round(int q, double precise) {
+//        double b = Math.pow(10, q);
+//        double res = precise * b;
+//        int r = (int) res;
+//        if (((precise * b * 10 % 10) >= 5) && (precise >= 0)) r++;
+//        if ((Math.abs(precise * b * 10 % 10) >= 5) && (precise < 0)) r--;
+//        return r / b;
+//    }
+////
+//    @Tag("Вычитание кватернионов")
+//    @Test
+//    public void subtract() {
+//        approximatelyEquals(new Quaternion(-0.1, new Vector(2.2, 0, 1)),
+//                new Quaternion(2, new Vector(4.3, 1, 2)).
+//                        subtract(new Quaternion(2.1, new Vector(2.1, 1, 1))));
+//    }
     @Tag("Вычитание кватернионов")
     @Test
     public void subtract() {
-        approximatelyEquals(new Quaternion(-0.1, new Vector(2.2, 0, 1)),
-                new Quaternion(2, new Vector(4.3, 1, 2)).
-                        subtract(new Quaternion(2.1, new Vector(2.1, 1, 1))));
-    }
+        Assertions.assertEquals(q.getA(),q3.getA(),0.000000000001 );
+        Assertions.assertEquals(q.getU().getB(),q3.getU().getB(),0.000000000001 );
+        Assertions.assertEquals(q.getU().getC(),q3.getU().getC(),0.000000000001 );
+        Assertions.assertEquals(q.getU().getD(),q3.getU().getD(),0.000000000001 );
 
+    }
 
     @Tag("Умножение кватерниона на скаляр")
     @Test
@@ -126,13 +138,17 @@ public class Tests {
                 new Quaternion(0, new Vector(-1, 1, 3)).multiply(new Quaternion(0, new Vector(1, 1, 2))));
     }
 
+
     @Tag("Построение")
     @Test
     public void construct() {
-        Assertions.assertEquals(new Quaternion(0, new Vector(1, 1, 1)),
-                Quaternion.fromAngleAndAxis(Math.PI, new Vector(1, 1, 1)));
+        Assertions.assertEquals(new Quaternion(0,new Vector(1,1,1)).getA(),
+                Quaternion.fromAngleAndAxis(Math.PI, new Vector(1, 1, 1)).getA(),0.000000001);
+        Assertions.assertEquals(new Quaternion(0,new Vector(1,1,1)).getU(),
+                Quaternion.fromAngleAndAxis(Math.PI, new Vector(1, 1, 1)).getU());
 
     }
+
 
     @Tag("Угол")
     @Test
